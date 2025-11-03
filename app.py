@@ -432,7 +432,7 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        if st.button("Registrar Información del Paciente", use_container_width=True):
+        if st.button("Registrar Información y hacer llamada de seguimiento al paciente", use_container_width=True):
             # Validaciones
             errores = []
             
