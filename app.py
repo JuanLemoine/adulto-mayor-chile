@@ -23,9 +23,9 @@ ENABLE_CALLS = os.getenv("ENABLE_CALLS", "True").lower() == "true"
 # Configuración de la página
 st.set_page_config(
     page_title="Sistema de Seguimiento Médico",
-    page_icon="🏥",
+    page_icon="⚕",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Estilos CSS personalizados para un diseño elegante y formal
@@ -156,19 +156,19 @@ st.markdown("""
 
 # Códigos de país para teléfonos
 COUNTRY_CODES = {
-    "🇨🇱 Chile (+56)": "+56",
-    "🇦🇷 Argentina (+54)": "+54",
-    "🇵🇪 Perú (+51)": "+51",
-    "🇨🇴 Colombia (+57)": "+57",
-    "🇲🇽 México (+52)": "+52",
-    "🇪🇸 España (+34)": "+34",
-    "🇺🇸 Estados Unidos (+1)": "+1",
-    "🇧🇷 Brasil (+55)": "+55",
-    "🇺🇾 Uruguay (+598)": "+598",
-    "🇵🇾 Paraguay (+595)": "+595",
-    "🇧🇴 Bolivia (+591)": "+591",
-    "🇪🇨 Ecuador (+593)": "+593",
-    "🇻🇪 Venezuela (+58)": "+58",
+    "Chile (+56)": "+56",
+    "Argentina (+54)": "+54",
+    "Perú (+51)": "+51",
+    "Colombia (+57)": "+57",
+    "México (+52)": "+52",
+    "España (+34)": "+34",
+    "Estados Unidos (+1)": "+1",
+    "Brasil (+55)": "+55",
+    "Uruguay (+598)": "+598",
+    "Paraguay (+595)": "+595",
+    "Bolivia (+591)": "+591",
+    "Ecuador (+593)": "+593",
+    "Venezuela (+58)": "+58",
 }
 
 def validar_email(email):
@@ -206,7 +206,7 @@ def hacer_llamada_elevenlabs(numero_telefono, nombre_paciente="", nombre_medico=
         if not ELEVENLABS_API_KEY or not ELEVENLABS_AGENT_ID or not ELEVENLABS_AGENT_PHONE_NUMBER_ID:
             return {
                 "success": False,
-                "message": "⚠️ Credenciales de ElevenLabs incompletas. Verifica las líneas 14-17 en app.py"
+                "message": "Credenciales de ElevenLabs incompletas. Verifica el archivo .env"
             }
         
         # Limpiar el número de teléfono (remover espacios)
@@ -249,14 +249,14 @@ def hacer_llamada_elevenlabs(numero_telefono, nombre_paciente="", nombre_medico=
         
         return {
             "success": True,
-            "message": f"✅ Llamada iniciada exitosamente al número {numero_telefono}",
+            "message": f"Llamada iniciada exitosamente al número {numero_telefono}",
             "response": response
         }
         
     except Exception as e:
         return {
             "success": False,
-            "message": f"❌ Error al realizar la llamada: {str(e)}"
+            "message": f"Error al realizar la llamada: {str(e)}"
         }
 
 def guardar_registro(datos):
@@ -283,44 +283,15 @@ def main():
     # Encabezado principal
     st.markdown("""
         <div class="header-container">
-            <h1 class="header-title">🏥 Sistema de Seguimiento Médico</h1>
+            <h1 class="header-title">Sistema de Seguimiento Médico</h1>
             <p class="header-subtitle">Plataforma de Gestión Integral para Pacientes y Profesionales de la Salud</p>
         </div>
     """, unsafe_allow_html=True)
     
-    # Sidebar con información
-    with st.sidebar:
-        st.markdown("### 📋 Información del Sistema")
-        st.markdown("""
-        Este sistema permite:
-        - ✅ Registro completo de pacientes
-        - ✅ Validación de datos
-        - ✅ Prescripciones médicas
-        - ✅ Recomendaciones personalizadas
-        - ✅ Historial de registros
-        - 📞 Llamadas automáticas con ElevenLabs
-        """)
-        
-        st.markdown("---")
-        st.markdown("### 📊 Estadísticas")
-        
-        # Mostrar estadísticas si existen registros
-        if os.path.exists('registros_pacientes.json'):
-            with open('registros_pacientes.json', 'r', encoding='utf-8') as f:
-                registros = json.load(f)
-                st.metric("Total de Pacientes", len(registros))
-        else:
-            st.metric("Total de Pacientes", 0)
-        
-        st.markdown("---")
-        st.markdown("### 🔍 Ver Registros")
-        if st.button("📄 Ver Todos los Registros"):
-            st.session_state.mostrar_registros = True
-    
     # Mostrar registros si se solicita
     if 'mostrar_registros' in st.session_state and st.session_state.mostrar_registros:
         st.markdown("---")
-        st.markdown("## 📋 Historial de Registros")
+        st.markdown("## Historial de Registros")
         
         if os.path.exists('registros_pacientes.json'):
             with open('registros_pacientes.json', 'r', encoding='utf-8') as f:
@@ -347,14 +318,14 @@ def main():
         else:
             st.info("No hay registros disponibles.")
         
-        if st.button("🔙 Cerrar Registros"):
+        if st.button("← Cerrar Registros"):
             st.session_state.mostrar_registros = False
             st.rerun()
         
         st.markdown("---")
     
     # Formulario principal
-    st.markdown("## 👤 Información del Paciente")
+    st.markdown("## Información del Paciente")
     
     with st.container():
         # Información del paciente
@@ -377,12 +348,12 @@ def main():
         # Validación de correo en tiempo real
         if correo_paciente:
             if validar_email(correo_paciente):
-                st.markdown('<p style="color: #10b981; font-size: 0.9rem;">✅ Correo válido</p>', unsafe_allow_html=True)
+                st.markdown('<p style="color: #10b981; font-size: 0.9rem;">✓ Correo válido</p>', unsafe_allow_html=True)
             else:
-                st.markdown('<p style="color: #ef4444; font-size: 0.9rem;">❌ Formato de correo inválido</p>', unsafe_allow_html=True)
+                st.markdown('<p style="color: #ef4444; font-size: 0.9rem;">✗ Formato de correo inválido</p>', unsafe_allow_html=True)
     
     # Teléfono con indicativo
-    st.markdown("### 📱 Número de Teléfono")
+    st.markdown("### Número de Teléfono")
     col1, col2 = st.columns([1, 2])
     
     with col1:
@@ -404,14 +375,14 @@ def main():
     if telefono:
         if validar_telefono(telefono):
             telefono_completo = f"{COUNTRY_CODES[indicativo]} {telefono}"
-            st.markdown(f'<p style="color: #10b981; font-size: 0.9rem;">✅ Teléfono: {telefono_completo}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="color: #10b981; font-size: 0.9rem;">✓ Teléfono: {telefono_completo}</p>', unsafe_allow_html=True)
         else:
-            st.markdown('<p style="color: #ef4444; font-size: 0.9rem;">❌ Ingrese solo números (7-15 dígitos)</p>', unsafe_allow_html=True)
+            st.markdown('<p style="color: #ef4444; font-size: 0.9rem;">✗ Ingrese solo números (7-15 dígitos)</p>', unsafe_allow_html=True)
     
     st.markdown("---")
     
     # Información del médico
-    st.markdown("## 👨‍⚕️ Información del Médico")
+    st.markdown("## Información del Médico")
     nombre_medico = st.text_input(
         "Nombre del Médico Tratante *",
         placeholder="Ej: Dr. María López",
@@ -421,7 +392,7 @@ def main():
     st.markdown("---")
     
     # Prescripción médica
-    st.markdown("## 💊 Prescripción Médica")
+    st.markdown("## Prescripción Médica")
     prescripcion = st.text_area(
         "Detalle de la Prescripción *",
         placeholder="""Ejemplo:
@@ -438,7 +409,7 @@ Indique medicamentos, dosis, frecuencia y duración del tratamiento.""",
     st.markdown("---")
     
     # Recomendaciones
-    st.markdown("## 📝 Recomendaciones para el Paciente")
+    st.markdown("## Recomendaciones para el Paciente")
     recomendaciones = st.text_area(
         "Recomendaciones y Cuidados *",
         placeholder="""Ejemplo:
@@ -461,7 +432,7 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        if st.button("📋 Registrar Información del Paciente", use_container_width=True):
+        if st.button("Registrar Información del Paciente", use_container_width=True):
             # Validaciones
             errores = []
             
@@ -490,7 +461,7 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
             # Mostrar errores o guardar
             if errores:
                 st.markdown('<div class="error-message">', unsafe_allow_html=True)
-                st.markdown("### ❌ Errores en el formulario:")
+                st.markdown("### Errores en el formulario:")
                 for error in errores:
                     st.markdown(f"- {error}")
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -513,7 +484,7 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
                 # Realizar llamada automática con ElevenLabs
                 telefono_para_llamar = f"{COUNTRY_CODES[indicativo]}{telefono}"
                 
-                with st.spinner('📞 Iniciando llamada al paciente...'):
+                with st.spinner('Iniciando llamada al paciente...'):
                     resultado_llamada = hacer_llamada_elevenlabs(
                         numero_telefono=telefono_para_llamar,
                         nombre_paciente=nombre_paciente,
@@ -524,7 +495,7 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
                 
                 # Mensaje de éxito
                 st.markdown('<div class="success-message">', unsafe_allow_html=True)
-                st.markdown("### ✅ Registro Exitoso")
+                st.markdown("### Registro Exitoso")
                 st.markdown(f"""
                 El paciente **{nombre_paciente}** ha sido registrado correctamente en el sistema.
                 
@@ -539,20 +510,18 @@ Indique todas las recomendaciones importantes para la recuperación del paciente
                 # Mostrar resultado de la llamada
                 if resultado_llamada["success"]:
                     st.success(resultado_llamada["message"])
-                    st.info("💬 El agente conversacional de ElevenLabs contactará al paciente para confirmar la información y proporcionar las instrucciones médicas.")
+                    st.info("El agente conversacional de ElevenLabs contactará al paciente para confirmar la información y proporcionar las instrucciones médicas.")
                 else:
                     st.warning(resultado_llamada["message"])
                 
-                st.balloons()
-                
                 # Botón para limpiar formulario
-                if st.button("➕ Registrar Nuevo Paciente"):
+                if st.button("+ Registrar Nuevo Paciente"):
                     st.rerun()
     
     # Footer
     st.markdown("""
         <div class="footer">
-            <p>🏥 Sistema de Seguimiento Médico | Adulto Mayor Chile</p>
+            <p>Sistema de Seguimiento Médico | Adulto Mayor Chile</p>
             <p style="font-size: 0.85rem; color: #9ca3af;">
                 Plataforma desarrollada para mejorar la atención y seguimiento de pacientes
             </p>
